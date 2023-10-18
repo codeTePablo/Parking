@@ -1,11 +1,26 @@
-import tkinter as tk
+# image
 from PIL import Image, ImageTk
+
+# interface
+import tkinter as tk
+from tkinter import ttk
+
+# arduino / esp32
 import serial
+
+# date
 import time
-from datetime import datetime
+import datetime
+
+# modelos
+from model.person import Person
+
+# database
+from db import get_connection
+import db
 
 
-class MiPrograma:
+class Windows:
     def __init__(self, root):
         self.root = root
         self.root.title("Programa con Tkinter")
@@ -32,18 +47,73 @@ class MiPrograma:
         self.huella_label.place(x=300, y=200)
 
         title_label = tk.Label(
-            self.root, text="Bienvenido", font=("Arial", 30), bg="white"
+            self.root,
+            text="Bienvenido",
+            font=("Agency FB", 40),
+            bg="#EEC591",
+            fg="white",
         )
-        title_label.place(x=300, y=140)
+        title_label.place(x=340, y=140)
 
-        # Crear el botón en la pantalla principal
-        self.boton_principal = tk.Button(
-            root, text="Registrarse", command=self.abrir_ventana
+        title_label_login = tk.Label(
+            self.root,
+            text="Login as ",
+            font=("Agency FB", 15),
+            bg="#EEC591",
+            fg="white",
         )
-        self.boton_principal.pack(pady=20)
-        self.boton_principal.place(x=350, y=450)
+        title_label_login.place(x=590, y=180)
 
-    def abrir_ventana(self):
+        self.boton_principal_login = ttk.Style()
+        self.boton_principal_login.configure(
+            "Estilo.TButton",
+            font=("Agency FB", 15),
+            background="#4CAF50",
+            foreground="Black",
+            # color
+        )
+        self.boton_principal_login = ttk.Button(
+            root,
+            text="Registrarse",
+            style="Estilo.TButton",
+            command=self.abrir_ventana_login,
+        )
+        self.boton_principal_login.pack(pady=20)
+        self.boton_principal_login.place(x=370, y=450)
+
+        self.boton_principal_user = ttk.Style()
+        self.boton_principal_user.configure(
+            "Estilo.TButton",
+            font=("Agency FB", 15),
+            background="#4CAF50",
+            foreground="Black",
+        )
+        self.boton_principal_user = ttk.Button(
+            root,
+            text="Usuario",
+            style="Estilo.TButton",
+            command=self.open_window_user,
+        )
+        self.boton_principal_user.pack(pady=20)
+        self.boton_principal_user.place(x=570, y=250)
+
+        self.boton_principal_guest = ttk.Style()
+        self.boton_principal_guest.configure(
+            "Estilo.TButton",
+            font=("Agency FB", 15),
+            background="#4CAF50",
+            foreground="Black",
+        )
+        self.boton_principal_guest = ttk.Button(
+            root,
+            text="invitado",
+            style="Estilo.TButton",
+            command=self.open_window_guest,
+        )
+        self.boton_principal_guest.pack(pady=20)
+        self.boton_principal_guest.place(x=570, y=300)
+
+    def abrir_ventana_login(self):
         # Crear una nueva ventana
         ventana_secundaria = tk.Toplevel(self.root)
         ventana_secundaria.title("Ventana Secundaria")
@@ -69,22 +139,22 @@ class MiPrograma:
         label_registro = tk.Label(
             label_verde,
             text="Nuevo usuario",
-            font=("Arial", 20),
+            font=("Agency FB", 27),
             bg="#66CDAA",
             fg="white",
         )
-        label_registro.pack(pady=20)
+        label_registro.pack(pady=0)
         label_registro.place(x=15, y=50)
 
         label_registro_nombre = tk.Label(
             label_verde,
             text="Nombre",
-            font=("Arial", 10),
+            font=("Agency FB", 13),
             bg="#66CDAA",
             fg="white",
         )
-        label_registro_nombre.pack(pady=20)
-        label_registro_nombre.place(x=50, y=130)
+        label_registro_nombre.pack(pady=0)
+        label_registro_nombre.place(x=50, y=120)
 
         # Agregar un Entry (cuadro de texto) y un botón dentro del Label, ponerle texto al textbox
         self.textbox_nombre = tk.Entry(label_verde)
@@ -94,44 +164,44 @@ class MiPrograma:
         label_registro_apellido = tk.Label(
             label_verde,
             text="Apellido",
-            font=("Arial", 10),
+            font=("Agency FB", 13),
             bg="#66CDAA",
             fg="white",
         )
-        label_registro_apellido.pack(pady=20)
+        label_registro_apellido.pack(pady=0)
         label_registro_apellido.place(x=50, y=170)
 
         self.textbox_apellido = tk.Entry(label_verde)
         self.textbox_apellido.pack(padx=5)
-        self.textbox_apellido.place(x=50, y=190)
+        self.textbox_apellido.place(x=50, y=195)
 
         label_registro_numero_cuenta = tk.Label(
             label_verde,
             text="Numero de cuenta",
-            font=("Arial", 10),
+            font=("Agency FB", 13),
             bg="#66CDAA",
             fg="white",
         )
-        label_registro_numero_cuenta.pack(pady=20)
-        label_registro_numero_cuenta.place(x=50, y=210)
+        label_registro_numero_cuenta.pack(pady=0)
+        label_registro_numero_cuenta.place(x=50, y=220)
 
         self.textbox_numero_cuenta = tk.Entry(label_verde)
         self.textbox_numero_cuenta.pack(padx=5)
-        self.textbox_numero_cuenta.place(x=50, y=230)
+        self.textbox_numero_cuenta.place(x=50, y=245)
 
         label_registro_numero_placa = tk.Label(
             label_verde,
             text="Numero de placa",
-            font=("Arial", 10),
+            font=("Agency FB", 13),
             bg="#66CDAA",
             fg="white",
         )
-        label_registro_numero_placa.pack(pady=20)
-        label_registro_numero_placa.place(x=50, y=250)
+        label_registro_numero_placa.pack(pady=0)
+        label_registro_numero_placa.place(x=50, y=270)
 
         self.textbox_numero_placa = tk.Entry(label_verde)
-        self.textbox_numero_placa.pack(padx=5)
-        self.textbox_numero_placa.place(x=50, y=270)
+        self.textbox_numero_placa.pack(padx=0)
+        self.textbox_numero_placa.place(x=50, y=295)
 
         boton_escanear = tk.Button(
             label_verde, text="Escanear huella", command=self.escanear_huella_arduino
@@ -164,6 +234,115 @@ class MiPrograma:
         etiqueta_imagen_huella.image = image
         etiqueta_imagen_huella.pack()
 
+    def open_window_user(self):
+        # Crear una nueva ventana
+        window_user = tk.Toplevel(self.root)
+        window_user.title("Ventana Secundaria")
+
+        # set the size of the window
+        window_user.geometry("790x580")
+        # set the window to not be resizable
+        window_user.resizable(False, False)
+
+        frame_user = tk.Frame(
+            window_user,
+            highlightbackground="#66CDAA",
+            highlightcolor="#66CDAA",
+            highlightthickness=5,
+        )
+        frame_user.pack(expand=True, fill=tk.BOTH, side=tk.LEFT)
+
+        # crear un label dentro del frame1 con el texto "Registro"
+        label_title = tk.Label(
+            frame_user,
+            text="Sing in",
+            font=("Agency FB", 30),
+            bg="#66CDAA",
+            fg="white",
+        )
+        label_title.pack(pady=20)
+
+        label_finger_scan = tk.Label(
+            frame_user,
+            text="Presione el detector de huella",
+            font=("Agency FB", 15),
+            bg="#66CDAA",
+            fg="white",
+        )
+        label_finger_scan.pack(pady=20)
+        label_finger_scan.place(x=305, y=450)
+
+        # create a label with a image huella
+        image_finger = Image.open("img/huella_3.png")
+        # change the zoom of the image
+        image_finger = image_finger.resize((200, 200), Image.LANCZOS)
+        # set the image to be used
+        self.huella_image_1 = ImageTk.PhotoImage(image_finger)
+        # display image without label
+        self.huella_label_1 = tk.Label(window_user, image=self.huella_image, bg=None)
+        self.huella_label_1.place(x=300, y=200)
+
+        # ///////////////////////////////
+
+        # mandar a ejecutar el programa del esp32 para que escanee la huella y coopie el dato en la variable
+        # finger = "123456789"
+        # si la huella coincide con la de la base de datos, entonces se debe mostrar un popup con el mensaje de que el usuario se registro correctamente
+        # Crear una nueva ventana (popup)
+        # popup = tk.Toplevel(self.root)
+        # popup.title("Usuario registrado")
+
+        # ademas si la hella coincide se debe de destruir la ventana de login y regresar a la ventana principal
+        # self.root.destroy()
+
+        print("abrir ventana user")
+
+    def open_window_guest(self):
+        # Crear una nueva ventana
+        window_guest = tk.Toplevel(self.root)
+        window_guest.title("Ventana Secundaria")
+
+        # set the size of the window
+        window_guest.geometry("790x580")
+        # set the window to not be resizable
+        window_guest.resizable(False, False)
+
+        frame_guest = tk.Frame(
+            window_guest,
+            highlightbackground="#66CDAA",
+            highlightcolor="#66CDAA",
+            highlightthickness=5,
+        )
+        frame_guest.pack(expand=True, fill=tk.BOTH, side=tk.LEFT)
+
+        # crear un label dentro del frame1 con el texto "Registro"
+        label_registro = tk.Label(
+            frame_guest,
+            text="Nuevo invitado",
+            font=("Agency FB", 25),
+            bg="#66CDAA",
+            fg="white",
+        )
+        label_registro.pack(pady=20)
+
+        # create a label with a image huella
+        image_finger_guest = Image.open("img/huella_3.png")
+        # change the zoom of the image
+        image_finger_guest = image_finger_guest.resize((200, 200), Image.LANCZOS)
+        # set the image to be used
+        self.huella_image_2 = ImageTk.PhotoImage(image_finger_guest)
+        # display image without label
+        self.huella_label_2 = tk.Label(window_guest, image=self.huella_image, bg=None)
+        self.huella_label_2.place(x=300, y=200)
+
+        # ///////////////////////////////
+        time = datetime.datetime.now()
+        hour = time.strftime("%I:%M %p")
+        date = time.strftime("%Y-%m-%d")
+        print(date)
+        print(hour)
+        print(time)
+        print("abrir ventana guest")
+
     def recopilar_texto(self):
         # Obtener el texto del Entry
         texto_nombre = self.textbox_nombre.get()
@@ -183,13 +362,19 @@ class MiPrograma:
             popup.title("Error")
 
             # set the size of the window
-            popup.geometry("200x200")
+            popup.geometry("250x100")
             # set the window to not be resizable
             popup.resizable(False, False)
 
+            # color de fondo
+            popup.configure(bg="cyan")
+
             # Agregar contenido al popup
             etiqueta_popup = tk.Label(
-                popup, text="Debe llenar todos los campos para registrarse."
+                popup,
+                text="Debe llenar todos los campos \npara registrarse.",
+                fg="black",
+                bg="cyan",
             )
             etiqueta_popup.pack(padx=20, pady=10)
 
@@ -217,7 +402,11 @@ class MiPrograma:
             boton_cerrar = tk.Button(popup, text="Cerrar", command=popup.destroy)
             boton_cerrar.pack(pady=10)
 
-        return texto_nombre, texto_apellido, texto_num_cuenta, texto_num_placa
+        # Crear un objeto de tipo People
+        persona = Person(
+            texto_nombre, texto_apellido, texto_num_cuenta, texto_num_placa
+        )
+        persona.save()
 
     def escanear_huella_arduino(self):
         # Enviar comando al Arduino para iniciar el escaneo
@@ -246,23 +435,11 @@ class MiPrograma:
             # Cierra el puerto serie
             ser.close()
 
-    def calcular_hora_de_salida(self):
-        # calcular la hora de entrada
-        hora_entrada = datetime.now().strftime("%I:%M %p")
-        # calcular la hora de salida
-        # hora_salida = datetime.now().strftime("%I:%M %p")
-        # calcular la fecha
-        fecha = datetime.now().strftime("%Y-%m-%d")
-        # calcular el tiempo de estadia
-        # tiempo_de_estadia = hora_salida - hora_entrada
-        # calcular el tiempo de estadia en horas
-        # tiempo_de_estadia_en_horas = tiempo_de_estadia.total_seconds() / 3600.0
-        print(hora_entrada)
-        print(fecha)
-
 
 if __name__ == "__main__":
     root = tk.Tk()
-    app = MiPrograma(root)
-    app.calcular_hora_de_salida()
+    app = Windows(root)
+    # app.calcular_hora_de_salida()
+    # with get_connection() as connection:
+    # db.create_tables(connection)
     root.mainloop()
