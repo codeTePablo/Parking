@@ -74,12 +74,12 @@ class Windows:
         )
         self.boton_principal_login = ttk.Button(
             root,
-            text="Registrarse",
+            text="Registrar nuevo usuario",
             style="Estilo.TButton",
             command=self.abrir_ventana_login,
         )
         self.boton_principal_login.pack(pady=20)
-        self.boton_principal_login.place(x=370, y=450)
+        self.boton_principal_login.place(x=350, y=450)
 
         self.boton_principal_user = ttk.Style()
         self.boton_principal_user.configure(
@@ -302,46 +302,82 @@ class Windows:
         window_guest.title("Ventana Secundaria")
 
         # set the size of the window
-        window_guest.geometry("790x580")
+        window_guest.geometry("550x580")
         # set the window to not be resizable
         window_guest.resizable(False, False)
 
-        frame_guest = tk.Frame(
+        header_title = tk.Frame(
             window_guest,
-            highlightbackground="#66CDAA",
-            highlightcolor="#66CDAA",
-            highlightthickness=5,
         )
-        frame_guest.pack(expand=True, fill=tk.BOTH, side=tk.LEFT)
+        header_title.pack(expand=False, fill=tk.BOTH, side=tk.TOP)
 
-        # crear un label dentro del frame1 con el texto "Registro"
-        label_registro = tk.Label(
-            frame_guest,
-            text="Nuevo invitado",
-            font=("Agency FB", 25),
-            bg="#66CDAA",
-            fg="white",
+        data_parking = tk.Frame(
+            window_guest,
         )
-        label_registro.pack(pady=20)
+        data_parking.pack(expand=False, fill=tk.BOTH, side=tk.TOP)
 
-        # create a label with a image huella
-        image_finger_guest = Image.open("img/huella_3.png")
-        # change the zoom of the image
-        image_finger_guest = image_finger_guest.resize((200, 200), Image.LANCZOS)
-        # set the image to be used
-        self.huella_image_2 = ImageTk.PhotoImage(image_finger_guest)
-        # display image without label
-        self.huella_label_2 = tk.Label(window_guest, image=self.huella_image, bg=None)
-        self.huella_label_2.place(x=300, y=200)
+        key_parking = tk.Frame(
+            window_guest,
+        )
+        key_parking.pack(expand=False, fill=tk.BOTH, side=tk.TOP)
 
-        # ///////////////////////////////
+        # agregr una imagen en la parte izquierda del header title frame
+        image = Image.open("img/logo_car_1.png")
+        image = image.resize((120, 120), Image.LANCZOS)
+        image = ImageTk.PhotoImage(image)
+        etiqueta_imagen = tk.Label(header_title, image=image)
+        etiqueta_imagen.image = image
+        etiqueta_imagen.pack(side=tk.LEFT, padx=10, pady=10)
+
+        # agregar un label en la parte derecha del header title frame
+        label_title = tk.Label(
+            header_title,
+            text="Parking System UAEMEX",
+            font=("Agency FB", 35),
+        )
+        label_title.pack(side=tk.TOP, padx=10, pady=10)
+        label_separator = tk.Label(
+            header_title,
+            text="_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _",
+            font=("Agency FB", 15),
+        )
+        label_separator.pack(side=tk.BOTTOM, padx=10, pady=10)
+
         time = datetime.datetime.now()
         hour = time.strftime("%I:%M %p")
         date = time.strftime("%Y-%m-%d")
-        print(date)
-        print(hour)
-        print(time)
-        print("abrir ventana guest")
+
+        # agregar un label en la parte de arriba de data parking frame
+        label_title = tk.Label(
+            data_parking,
+            text=f"Bienvenido\n{date}",
+            font=("Agency FB", 22),
+        )
+        label_title.pack(side=tk.TOP, padx=10, pady=10)
+
+        # agregar una imagen a la izquierda de data parking frame
+        image = Image.open("img/car.png")
+        image = image.resize((100, 100), Image.LANCZOS)
+        image = ImageTk.PhotoImage(image)
+        etiqueta_imagen = tk.Label(data_parking, image=image)
+        etiqueta_imagen.image = image
+        etiqueta_imagen.pack(side=tk.LEFT, padx=10, pady=10)
+        # position of the image
+        etiqueta_imagen.place(x=50, y=70)
+
+        label_time = tk.Label(
+            data_parking,
+            text=f"Llegada: {time.strftime('%I:%M %p')}",
+            font=("Agency FB", 15),
+        )
+        label_time.pack(side=tk.TOP, padx=10, pady=10)
+
+        label_separator = tk.Label(
+            data_parking,
+            text="_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _",
+            font=("Agency FB", 15),
+        )
+        label_separator.pack(side=tk.BOTTOM, padx=10, pady=10)
 
     def recopilar_texto(self):
         # Obtener el texto del Entry
