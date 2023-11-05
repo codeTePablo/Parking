@@ -77,12 +77,12 @@ class Windows:
         )
         self.boton_principal_login = ttk.Button(
             root,
-            text="Registrar nuevo usuario",
+            text="Administrador",
             style="Estilo.TButton",
-            command=self.abrir_ventana_login,
+            command=self.admin_window,
         )
         self.boton_principal_login.pack(pady=20)
-        self.boton_principal_login.place(x=350, y=450)
+        self.boton_principal_login.place(x=10, y=10)
 
         self.boton_principal_user = ttk.Style()
         self.boton_principal_user.configure(
@@ -115,6 +115,87 @@ class Windows:
         )
         self.boton_principal_guest.pack(pady=20)
         self.boton_principal_guest.place(x=570, y=300)
+
+        self.boton_principal_guest_exit = ttk.Style()
+        self.boton_principal_guest_exit.configure(
+            "Estilo.TButton",
+            font=("Agency FB", 15),
+            background="#4CAF50",
+            foreground="Black",
+        )
+        self.boton_principal_guest_exit = ttk.Button(
+            root,
+            text="Registrar salida",
+            style="Estilo.TButton",
+            command=self.open_window_guest_exit,
+        )
+        self.boton_principal_guest_exit.pack(pady=20)
+        self.boton_principal_guest_exit.place(x=370, y=450)
+
+    def admin_window(self):
+        # Crear el Toplevel
+        toplevel = tk.Toplevel(self.root)
+        toplevel.title("Input Box")
+
+        # set the size of the window
+        toplevel.geometry("250x150")
+        # set the window to not be resizable
+        toplevel.resizable(False, False)
+
+        show_password_var = tk.BooleanVar()
+        show_password_var.set(False)
+
+        # generar un label con texto
+        label_title = tk.Label(
+            toplevel,
+            text="Ingrese la contraseña",
+            font=("Agency FB", 15),
+            bg="#66CDAA",
+            fg="white",
+        )
+        label_title.pack(pady=0)
+
+        # Crear el cuadro de entrada en el Toplevel
+        entry = tk.Entry(
+            toplevel,
+            show="*",
+        )
+        entry.pack(pady=10)
+
+        # agregar un checkbox para pocer ver la contraseña
+        checkbutton = tk.Checkbutton(
+            toplevel,
+            text="Mostrar Contraseña",
+            variable=show_password_var,
+            command=lambda: self.toggle_show_password(entry, show_password_var),
+        )
+        checkbutton.pack()
+
+        # Crear el botón en el Toplevel
+        button = tk.Button(
+            toplevel,
+            text="Entrar",
+            command=lambda: self.check_password(entry.get(), toplevel),
+        )
+        button.pack()
+
+    def toggle_show_password(self, entry, show_password_var):
+        # Mostrar u ocultar la contraseña según el estado del Checkbutton
+        show_password = show_password_var.get()
+        if show_password:
+            entry.config(show="")
+        else:
+            entry.config(show="*")
+
+    def check_password(self, input_text, toplevel):
+        # Mostrar el texto ingresado en la consola y cerrar el Toplevel
+        # print(f"Dato ingresado: {input_text}")
+        password = "1234"
+        if input_text == password:
+            print("contraseña correcta")
+            toplevel.destroy()
+        else:
+            print("contraseña incorrecta")
 
     def abrir_ventana_login(self):
         # Crear una nueva ventana
@@ -383,7 +464,7 @@ class Windows:
 
         # generar una contraseña aleatoria
         password = Password.generar_contrasena(self)
-        print(password)
+        # print(password)
 
         label_numer_client = tk.Label(
             key_parking,
@@ -392,9 +473,126 @@ class Windows:
         )
         label_numer_client.pack(side=tk.TOP, padx=10, pady=10)
 
+        boton_cerrar = tk.Button(
+            key_parking, text="Cerrar", command=window_guest.destroy
+        )
+        # poner el boton en la parte de abajo del frame
+        boton_cerrar.pack(side=tk.BOTTOM, padx=0, pady=0)
+
         # generar un nuevo folio para guest
         guest = Guest(fecha=date, hora=hour, password=password)
         guest.save()
+
+    def open_window_guest_exit(self):
+        # Crear una nueva ventana
+        window_guest_exit = tk.Toplevel(self.root)
+        window_guest_exit.title("window_guest_exit")
+
+        # set the size of the window
+        window_guest_exit.geometry("550x580")
+        # set the window to not be resizable
+        window_guest_exit.resizable(False, False)
+
+        header_title = tk.Frame(
+            window_guest_exit,
+        )
+        header_title.pack(expand=False, fill=tk.BOTH, side=tk.TOP)
+
+        data_parking = tk.Frame(
+            window_guest_exit,
+        )
+        data_parking.pack(expand=False, fill=tk.BOTH, side=tk.TOP)
+
+        key_parking = tk.Frame(
+            window_guest_exit,
+        )
+        key_parking.pack(expand=False, fill=tk.BOTH, side=tk.TOP)
+
+        # agregr una imagen en la parte izquierda del header title frame
+        image = Image.open("img/logo_car_1.png")
+        image = image.resize((120, 120), Image.LANCZOS)
+        image = ImageTk.PhotoImage(image)
+        etiqueta_imagen = tk.Label(header_title, image=image)
+        etiqueta_imagen.image = image
+        etiqueta_imagen.pack(side=tk.LEFT, padx=10, pady=10)
+
+        # agregar un label en la parte derecha del header title frame
+        label_title = tk.Label(
+            header_title,
+            text="Parking System UAEMEX",
+            font=("Agency FB", 35),
+        )
+        label_title.pack(side=tk.TOP, padx=10, pady=10)
+        label_separator = tk.Label(
+            header_title,
+            text="_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _",
+            font=("Agency FB", 15),
+        )
+        label_separator.pack(side=tk.BOTTOM, padx=10, pady=10)
+
+        hour = time.strftime("%I:%M %p")
+        date = time.strftime("%Y-%m-%d")
+
+        # agregar un label en la parte de arriba de data parking frame
+        label_title = tk.Label(
+            data_parking,
+            text=f"Vuelva Pronto\n{date}",
+            font=("Agency FB", 22),
+        )
+        label_title.pack(side=tk.TOP, padx=10, pady=10)
+
+        # agregar una imagen a la izquierda de data parking frame
+        image = Image.open("img/car.png")
+        image = image.resize((100, 100), Image.LANCZOS)
+        image = ImageTk.PhotoImage(image)
+        etiqueta_imagen = tk.Label(data_parking, image=image)
+        etiqueta_imagen.image = image
+        etiqueta_imagen.pack(side=tk.LEFT, padx=10, pady=10)
+        # position of the image
+        etiqueta_imagen.place(x=50, y=70)
+
+        image_ = Image.open("img/car.png")
+        image_ = image_.resize((100, 100), Image.LANCZOS)
+        image_ = ImageTk.PhotoImage(image_)
+        etiqueta_imagen_ = tk.Label(data_parking, image=image_)
+        etiqueta_imagen_.image = image_
+        etiqueta_imagen_.pack(side=tk.RIGHT, padx=10, pady=10)
+        # position of the image
+        etiqueta_imagen_.place(x=380, y=120)
+
+        label_time = tk.Label(
+            data_parking,
+            text=f"Llegada: {time.strftime('%I:%M %p')}",
+            font=("Agency FB", 15),
+        )
+        label_time.pack(side=tk.TOP, padx=10, pady=10)
+
+        label_time_exit = tk.Label(
+            data_parking,
+            text=f"Salida: {time.strftime('%I:%M %p')}",
+            font=("Agency FB", 15),
+        )
+        label_time_exit.pack(side=tk.TOP, padx=10, pady=10)
+
+        label_separator = tk.Label(
+            data_parking,
+            text="_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _",
+            font=("Agency FB", 15),
+        )
+        label_separator.pack(side=tk.BOTTOM, padx=10, pady=10)
+
+        label_numer_client = tk.Label(
+            key_parking,
+            text=f"Total a pagar:",
+            font=("Agency FB", 28),
+        )
+        label_numer_client.pack(side=tk.TOP, padx=10, pady=10)
+
+        boton_cerrar = tk.Button(
+            key_parking, text="Cerrar", command=window_guest_exit.destroy
+        )
+        # poner el boton en la parte de abajo del frame
+        boton_cerrar.pack(side=tk.BOTTOM, padx=0, pady=0)
 
     def recopilar_texto(self):
         # Obtener el texto del Entry
