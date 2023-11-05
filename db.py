@@ -53,17 +53,17 @@ def register_new_user(
     """create new user
     Args:
         arg1 (): connection database
-        arg2 (str): title of the poll
-        arg3 (str): owner has create poll
-        arg4 (List[str]): options has contains the poll
+        arg2 (str): name has user
+        arg3 (str): surmane has user
+        arg4 (str): num_cuenta has user
+        arg5 (str): num_placa has user
     Return:
-        Query: cursor insert new poll in database
+        Query: register new user
     """
     with get_cursor(connection) as cursor:
         cursor.execute(INSERT_TABLE_USER, (name, surname, num_cuenta, num_placa))
-
-        poll_id = cursor.fetchone()[0]
-        return poll_id
+        new_user = cursor.fetchone()[0]
+        return new_user
 
 
 # GUEST
@@ -78,9 +78,16 @@ def create_table_guest(connection):
         cursor.execute(CREATE_TABLE_GUEST)
 
 
-def register_new_guest(connection):
+def register_new_guest(connection, fecha, hora, password):
     with get_cursor(connection) as cursor:
-        cursor.execute(INSERT_TABLE_GUEST)
+        cursor.execute(
+            INSERT_TABLE_GUEST,
+            (
+                fecha,
+                hora,
+                password,
+            ),
+        )
         guest_id = cursor.fetchone()[0]
         return guest_id
 

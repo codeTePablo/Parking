@@ -14,6 +14,9 @@ import datetime
 
 # modelos
 from model.person import Person
+from model.guest import Guest
+
+from model.password import Password
 
 # database
 from db import get_connection
@@ -343,7 +346,6 @@ class Windows:
         )
         label_separator.pack(side=tk.BOTTOM, padx=10, pady=10)
 
-        time = datetime.datetime.now()
         hour = time.strftime("%I:%M %p")
         date = time.strftime("%Y-%m-%d")
 
@@ -378,6 +380,21 @@ class Windows:
             font=("Agency FB", 15),
         )
         label_separator.pack(side=tk.BOTTOM, padx=10, pady=10)
+
+        # generar una contraseña aleatoria
+        password = Password.generar_contrasena(self)
+        print(password)
+
+        label_numer_client = tk.Label(
+            key_parking,
+            text=f"CODIGO: \n{password}",
+            font=("Agency FB", 28),
+        )
+        label_numer_client.pack(side=tk.TOP, padx=10, pady=10)
+
+        # generar un nuevo folio para guest
+        guest = Guest(fecha=date, hora=hour, password=password)
+        guest.save()
 
     def recopilar_texto(self):
         # Obtener el texto del Entry

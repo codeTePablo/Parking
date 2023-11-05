@@ -46,7 +46,6 @@ class Person:
                 self.surname,
                 self.num_cuenta,
                 self.num_placa,
-                # self.finger,
             )
             self.id = new_user
 
