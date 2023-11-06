@@ -10,3 +10,6 @@ CREATE_TABLE_GUEST = "CREATE TABLE IF NOT EXISTS guest (folio SERIAL PRIMARY KEY
 INSERT_TABLE_GUEST = (
     "INSERT INTO guest (fecha, hora, password) VALUES (%s, %s, %s) RETURNING folio;"
 )
+
+SELECT_TABLE_GUEST = "SELECT * FROM guest WHERE password = %s;"
+# SELECT_TABLE_GUEST = "SELECT * FROM guest WHERE password = %s RETURNING fecha, hora;"

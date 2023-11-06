@@ -32,6 +32,11 @@ class Guest:
     def __repr__(self):
         return f"<People {self.name} {self.surname}>"
 
+    def get_guest(self, password):
+        with get_connection() as connection:
+            guest = db.get_guest_pass(connection, password)
+            return guest
+
     def set_departure_time(self, departure_time=None):
         self.departure_time = departure_time if departure_time else datetime.now()
         # Aquí puedes agregar el código para actualizar la hora de salida en la base de datos

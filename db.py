@@ -92,4 +92,11 @@ def register_new_guest(connection, fecha, hora, password):
         return guest_id
 
 
+def get_guest_pass(connection, password):
+    with get_cursor(connection) as cursor:
+        cursor.execute(SELECT_TABLE_GUEST, (password,))
+        guest = cursor.fetchone()
+        return guest
+
+
 create_tables(parking.getconn())
