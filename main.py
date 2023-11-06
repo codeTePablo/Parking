@@ -180,7 +180,7 @@ class Windows:
     def check_password(self, input_text, toplevel):
         password = "1234"
         if input_text == password:
-            print("contraseña correcta")
+            # print("contraseña correcta")
             self.abrir_ventana_login()
             toplevel.destroy()
         else:
@@ -279,7 +279,9 @@ class Windows:
         self.textbox_numero_placa.place(x=50, y=295)
 
         boton_escanear = tk.Button(
-            label_verde, text="Escanear huella", command=self.escanear_huella_arduino
+            label_verde,
+            text="Escanear huella",
+            # command=self.escanear_huella_arduino
         )
         boton_escanear.pack(side=tk.BOTTOM)
         boton_escanear.place(x=60, y=340)
@@ -577,17 +579,17 @@ class Windows:
             fg="white",
         )
         label_title.pack(pady=0)
-        entry = tk.Entry(
+        entry_pass = tk.Entry(
             toplevel,
         )
-        entry.pack(pady=10)
+        entry_pass.pack(pady=10)
 
-        button = tk.Button(
+        button_pass = tk.Button(
             toplevel,
             text="Entrar",
-            command=lambda: self.check_password_exit(entry.get(), toplevel),
+            command=lambda: self.check_password_exit(entry_pass.get(), toplevel),
         )
-        button.pack()
+        button_pass.pack()
 
     def check_password_exit(self, input_text, toplevel):
         guest = Guest().get_guest(input_text)
