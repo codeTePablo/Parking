@@ -16,11 +16,15 @@ class Guest:
         fecha: str = None,
         hora: str = None,
         password: str = None,
+        exit_time: str = None,
+        tax: float = None,
     ):
         self.folio = folio
         self.fecha = fecha
         self.hora = hora
         self.password = password
+        self.exit_time = exit_time
+        self.tax = tax
 
     def save(self):
         with get_connection() as connection:
@@ -37,13 +41,17 @@ class Guest:
             guest = db.get_guest_pass(connection, password)
             return guest
 
-    def set_departure_time(self, departure_time=None):
-        self.departure_time = departure_time if departure_time else datetime.now()
-        # Aquí puedes agregar el código para actualizar la hora de salida en la base de datos
+    def update_guest(self, exit_time, tax, password):
+        with get_connection() as connection:
+            guest = db.update_guest_exit_time(
+                connection,
+                exit_time,
+                tax,
+                password,
+            )
+            return guest
 
-    def get_stay_duration(self):
-        if self.departure_time:
-            duration = self.departure_time - self.arrival_time
-            return duration
-        else:
-            return None
+    def calculate_tax(self, hora, exit_time, tax):
+        with get_connection() as connection:
+            tax = db.calculate_tax_price(connection, hora, exit_time, tax)
+            return tax

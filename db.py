@@ -94,9 +94,30 @@ def register_new_guest(connection, fecha, hora, password):
 
 def get_guest_pass(connection, password):
     with get_cursor(connection) as cursor:
-        cursor.execute(SELECT_TABLE_GUEST, (password,))
+        cursor.execute(SELECT_GUEST_BY_PASSWORD, (password,))
         guest = cursor.fetchone()
         return guest
+
+
+def update_guest_exit_time(connection, exit_time, tax, password):
+    with get_cursor(connection) as cursor:
+        cursor.execute(
+            UPDATE_GUEST_BY_PASSWORD,
+            (
+                exit_time,
+                tax,
+                password,
+            ),
+        )
+        guest = cursor.fetchone()
+        return guest
+
+
+def calculate_tax_price(connection, exit_time, tax):
+    with get_cursor(connection) as cursor:
+        cursor.execute(CALCULATE_TAX, (exit_time, tax))
+        tax = cursor.fetchone()[0]
+        return tax
 
 
 create_tables(parking.getconn())

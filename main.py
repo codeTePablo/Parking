@@ -459,7 +459,7 @@ class Windows:
         guest = Guest(fecha=date, hora=hour, password=password)
         guest.save()
 
-    def open_window_guest_exit(self):
+    def open_window_guest_exit(self, hour_in, hour_exit, semifinal_tax):
         window_guest_exit = tk.Toplevel(self.root)
         window_guest_exit.title("window_guest_exit")
         window_guest_exit.geometry("550x580")
@@ -502,7 +502,6 @@ class Windows:
         )
         label_separator.pack(side=tk.BOTTOM, padx=10, pady=10)
 
-        hour = time.strftime("%I:%M %p")
         date = time.strftime("%Y-%m-%d")
 
         # agregar un label en la parte de arriba de data parking frame
@@ -534,14 +533,14 @@ class Windows:
 
         label_time = tk.Label(
             data_parking,
-            text=f"Llegada: {time.strftime('%I:%M %p')}",
+            text=f"Llegada: {hour_in}",
             font=("Agency FB", 15),
         )
         label_time.pack(side=tk.TOP, padx=10, pady=10)
 
         label_time_exit = tk.Label(
             data_parking,
-            text=f"Salida: {time.strftime('%I:%M %p')}",
+            text=f"Salida: {hour_exit}",
             font=("Agency FB", 15),
         )
         label_time_exit.pack(side=tk.TOP, padx=10, pady=10)
@@ -555,7 +554,7 @@ class Windows:
 
         label_numer_client = tk.Label(
             key_parking,
-            text=f"Total a pagar:",
+            text=f"Total a pagar:\n {semifinal_tax}",
             font=("Agency FB", 28),
         )
         label_numer_client.pack(side=tk.TOP, padx=10, pady=10)
@@ -596,7 +595,21 @@ class Windows:
 
         if guest and input_text == str(guest[3]):
             print(f"Contraseña correcta para el cliente con folio {guest[0]}")
-            self.open_window_guest_exit()
+            print(input_text)
+            new_hour = time.strftime("%I:%M %p")
+            # llamar a una funcion que calcule el tax
+            new_tax = 10.0
+
+            guest_exit = Guest().update_guest(
+                new_hour,
+                new_tax,
+                input_text,
+            )
+            hour_in = guest_exit[2]
+            hour_exit = guest_exit[4]
+            semifinal_tax = guest_exit[5]
+            self.open_window_guest_exit(hour_in, hour_exit, semifinal_tax)
+            toplevel.destroy()
         else:
             popup = tk.Toplevel(self.root)
             popup.title("Error")
