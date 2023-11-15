@@ -103,7 +103,7 @@ class Windows:
         )
         self.boton_principal_guest = ttk.Button(
             root,
-            text="invitado",
+            text="Invitado",
             style="Estilo.TButton",
             command=self.open_window_guest,
         )
@@ -459,7 +459,7 @@ class Windows:
         guest = Guest(fecha=date, hora=hour, password=password)
         guest.save()
 
-    def open_window_guest_exit(self, hour_in, hour_exit, semifinal_tax):
+    def open_window_guest_exit(self, hour_in, hour_exit, semifinal_tax, folio):
         window_guest_exit = tk.Toplevel(self.root)
         window_guest_exit.title("window_guest_exit")
         window_guest_exit.geometry("550x580")
@@ -554,7 +554,7 @@ class Windows:
 
         label_numer_client = tk.Label(
             key_parking,
-            text=f"Total a pagar:\n {semifinal_tax}",
+            text=f"Folio: {folio}\nTotal a pagar:\n {semifinal_tax}",
             font=("Agency FB", 28),
         )
         label_numer_client.pack(side=tk.TOP, padx=10, pady=10)
@@ -590,15 +590,40 @@ class Windows:
         )
         button_pass.pack()
 
+    # def check_tax_price(self, hour_in, hour_exit):
+    #     try:
+    #         # Convertir a cadena de texto antes de usar strptime
+    #         time_in = datetime.datetime.strptime(hour_in, "%H:%M:%S")
+    #         time_exit = datetime.datetime.strptime(hour_exit, "%H:%M:%S")
+    #         time_parked = time_exit - time_in
+
+    #         # Calcular el precio a pagar
+    #         if time_parked > datetime.timedelta(hours=1):
+    #             price = 15.0
+    #         else:
+    #             # Precio base si el tiempo es menor o igual a una hora
+    #             price = 5.0
+
+    #         # Mostrar el precio a pagar
+    #         print(price)
+    #         return price
+
+    #     except ValueError as e:
+    #         # Manejar errores de formato de hora
+    #         print(f"Error al analizar las horas: {e}")
+    #         return None
+
     def check_password_exit(self, input_text, toplevel):
         guest = Guest().get_guest(input_text)
 
         if guest and input_text == str(guest[3]):
-            print(f"Contraseña correcta para el cliente con folio {guest[0]}")
-            print(input_text)
-            new_hour = time.strftime("%I:%M %p")
-            # llamar a una funcion que calcule el tax
+            folio = guest[0]
+            new_hour = time.strftime("%H:%M:%S")
+            # print(new_hour)
             new_tax = 10.0
+            # new_tax_1 = self.check_tax_price(guest[2], new_hour)
+            # print(guest[2])
+            # print(new_tax_1)
 
             guest_exit = Guest().update_guest(
                 new_hour,
@@ -608,7 +633,7 @@ class Windows:
             hour_in = guest_exit[2]
             hour_exit = guest_exit[4]
             semifinal_tax = guest_exit[5]
-            self.open_window_guest_exit(hour_in, hour_exit, semifinal_tax)
+            self.open_window_guest_exit(hour_in, hour_exit, semifinal_tax, folio)
             toplevel.destroy()
         else:
             popup = tk.Toplevel(self.root)

@@ -50,8 +50,3 @@ class Guest:
                 password,
             )
             return guest
-
-    def calculate_tax(self, hora, exit_time, tax):
-        with get_connection() as connection:
-            tax = db.calculate_tax_price(connection, hora, exit_time, tax)
-            return tax

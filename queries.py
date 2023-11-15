@@ -18,8 +18,3 @@ SELECT_GUEST_BY_PASSWORD = "SELECT * FROM guest WHERE password = %s;"
 UPDATE_GUEST_BY_PASSWORD = (
     "UPDATE guest SET exit_time = %s, tax = %s WHERE password = %s RETURNING *;"
 )
-
-CALCULATE_TAX = "SELECT * FROM guest WHERE hora = %s AND exit_time = %s AND tax = %s;"
-
-
-# UPDATE guest SET exit_time = '12:24:00' WHERE folio = 1;

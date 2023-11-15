@@ -113,11 +113,4 @@ def update_guest_exit_time(connection, exit_time, tax, password):
         return guest
 
 
-def calculate_tax_price(connection, exit_time, tax):
-    with get_cursor(connection) as cursor:
-        cursor.execute(CALCULATE_TAX, (exit_time, tax))
-        tax = cursor.fetchone()[0]
-        return tax
-
-
 create_tables(parking.getconn())
