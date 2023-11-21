@@ -113,4 +113,25 @@ def update_guest_exit_time(connection, exit_time, tax, password):
         return guest
 
 
+def get_all_guests(connection):
+    with get_cursor(connection) as cursor:
+        cursor.execute(SELECT_ALL)
+        guests = cursor.fetchall()
+        return guests
+
+
+def get_user(connection, id):
+    with get_cursor(connection) as cursor:
+        cursor.execute(SELECT_USER, (id,))
+        user = cursor.fetchone()
+        return user
+
+
+def detele_user(connection, id):
+    with get_cursor(connection) as cursor:
+        cursor.execute(DELETE_USER, (id,))
+        connection.commit()
+        return True
+
+
 create_tables(parking.getconn())

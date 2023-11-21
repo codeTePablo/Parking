@@ -18,3 +18,11 @@ SELECT_GUEST_BY_PASSWORD = "SELECT * FROM guest WHERE password = %s;"
 UPDATE_GUEST_BY_PASSWORD = (
     "UPDATE guest SET exit_time = %s, tax = %s WHERE password = %s RETURNING *;"
 )
+
+
+# admnin
+SELECT_ALL = "SELECT * FROM new_user;"
+
+SELECT_USER = "SELECT * FROM new_user WHERE id = %s;"
+
+DELETE_USER = "DELETE FROM new_user WHERE id = %s;"
