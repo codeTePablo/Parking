@@ -13,40 +13,37 @@ class Guest:
     def __init__(
         self,
         folio: int = None,
-        fecha: str = None,
-        hora: str = None,
-        password: str = None,
+        date: str = None,
+        hour: str = None,
+        finger: int = None,
         exit_time: str = None,
         tax: float = None,
     ):
         self.folio = folio
-        self.fecha = fecha
-        self.hora = hora
-        self.password = password
-        self.exit_time = exit_time
+        self.date = date
+        self.hour = hour
         self.tax = tax
+        self.finger = finger
+        self.exit_time = exit_time
 
     def save(self):
         with get_connection() as connection:
             new_guest = db.register_new_guest(
-                connection, self.fecha, self.hora, self.password
+                connection, self.date, self.hour, self.finger
             )
             self.folio = new_guest
 
     def __repr__(self):
         return f"<People {self.name} {self.surname}>"
 
-    def get_guest(self, password):
-        with get_connection() as connection:
-            guest = db.get_guest_pass(connection, password)
-            return guest
-
-    def update_guest(self, exit_time, tax, password):
+    def update_guest(self):
         with get_connection() as connection:
             guest = db.update_guest_exit_time(
-                connection,
-                exit_time,
-                tax,
-                password,
+                connection, self.exit_time, self.tax, self.finger
             )
+            return guest
+
+    def get_guest(self):
+        with get_connection() as connection:
+            guest = db.get_guest_pass(connection, self.finger)
             return guest

@@ -48,68 +48,99 @@ def create_tables(connection):
 
 
 def register_new_user(
-    connection, name: str, surname: str, num_cuenta: int, num_placa: str
+    connection,
+    name: str,
+    surname: str,
+    num_cuenta: int,
+    num_placa: str,
+    finger: int,
 ) -> int:
-    """create new user
-    Args:
-        arg1 (): connection database
-        arg2 (str): name has user
-        arg3 (str): surmane has user
-        arg4 (str): num_cuenta has user
-        arg5 (str): num_placa has user
-    Return:
-        Query: register new user
-    """
     with get_cursor(connection) as cursor:
-        cursor.execute(INSERT_TABLE_USER, (name, surname, num_cuenta, num_placa))
+        cursor.execute(
+            INSERT_TABLE_USER, (name, surname, num_cuenta, num_placa, finger)
+        )
         new_user = cursor.fetchone()[0]
         return new_user
 
 
+def search_user_by_finger(connection, finger: int):
+    with get_cursor(connection) as cursor:
+        cursor.execute(SEARCH_USER_BY_FINGER, (finger,))
+        user = cursor.fetchone()
+        # print(user)
+        return user
+
+
+def update_user_id(connection, name, surname, num_cuenta, num_placa, idn):
+    with get_cursor(connection) as cursor:
+        cursor.execute(
+            UPDATE_USER,
+            (
+                name,
+                surname,
+                num_cuenta,
+                num_placa,
+                idn,
+            ),
+        )
+        connection.commit()
+        return True
+
+
+def detele_user(connection, id):
+    with get_cursor(connection) as cursor:
+        cursor.execute(DELETE_USER, (id,))
+        connection.commit()
+        return True
+
+
+# insert hour and date
+def insert_hour(connection, fecha, hora, finger):
+    with get_cursor(connection) as cursor:
+        cursor.execute(INSERT_TIME, (fecha, hora, finger))
+        connection.commit()
+        return True
+
+
 # GUEST
 def create_table_guest(connection):
-    """
-    Args:
-        arg1 (str): connection to database
-    Return:
-        Query: create polls
-    """
     with get_cursor(connection) as cursor:
         cursor.execute(CREATE_TABLE_GUEST)
 
 
-def register_new_guest(connection, fecha, hora, password):
+def register_new_guest(connection, fecha, hora, finger):
     with get_cursor(connection) as cursor:
         cursor.execute(
             INSERT_TABLE_GUEST,
             (
                 fecha,
                 hora,
-                password,
+                finger,
             ),
         )
         guest_id = cursor.fetchone()[0]
         return guest_id
 
 
-def get_guest_pass(connection, password):
+def get_guest_pass(connection, finger):
     with get_cursor(connection) as cursor:
-        cursor.execute(SELECT_GUEST_BY_PASSWORD, (password,))
+        cursor.execute(SELECT_GUEST_BY_FINGER, (finger,))
         guest = cursor.fetchone()
         return guest
 
 
-def update_guest_exit_time(connection, exit_time, tax, password):
+def update_guest_exit_time(connection, exit_time, tax, finger):
     with get_cursor(connection) as cursor:
         cursor.execute(
-            UPDATE_GUEST_BY_PASSWORD,
+            UPDATE_GUEST_BY_FINGER,
             (
                 exit_time,
                 tax,
-                password,
+                finger,
             ),
         )
         guest = cursor.fetchone()
+        # print(guest)
         return guest
 
 
@@ -125,13 +156,6 @@ def get_user(connection, id):
         cursor.execute(SELECT_USER, (id,))
         user = cursor.fetchone()
         return user
-
-
-def detele_user(connection, id):
-    with get_cursor(connection) as cursor:
-        cursor.execute(DELETE_USER, (id,))
-        connection.commit()
-        return True
 
 
 create_tables(parking.getconn())

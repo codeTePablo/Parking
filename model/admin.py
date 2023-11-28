@@ -15,7 +15,14 @@ class Admin:
     def get_user(self, id):
         with get_connection() as connection:
             user = db.get_user(connection, id)
-            print(user)
+            # print(user)
+            return user
+
+    def update_user(self, name, surname, num_cuenta, num_placa, id):
+        with get_connection() as connection:
+            user = db.update_user_id(
+                connection, name, surname, num_cuenta, num_placa, id
+            )
             return user
 
     def drop_user(self, id):
