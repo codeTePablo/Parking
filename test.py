@@ -1,4 +1,5 @@
 import serial
+import time
 
 arduino_port = "COM3"  # Cambia esto al puerto correcto de tu Arduino
 baud_rate = 9600
@@ -13,10 +14,12 @@ def scan(command):
         ser.write(command.encode())
         response = ser.readline().decode().strip()
         print("Respuesta de Arduino:", response)
-        if response.startswith("Enrolling ID"):
-            break
-        # if response == "Stored!":
+        # dar un tiempo y cerrar la conexion
+        # if response.startswith("Enrolling ID"):
         # break
+        if response == "Stored!":
+            # time.sleep(15)
+            ser.close()
 
 
 def read(command):
@@ -37,10 +40,14 @@ def read(command):
             # break
         elif id_finger == "2":
             print("2")
+        elif id_finger == "0":
+            print("0")
             # break
         elif id_finger == "3":
             print("3")
+        elif id_finger == "4":
+            print("4")
 
 
 # scan("E")
-# read("R")
+read("R")
