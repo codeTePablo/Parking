@@ -22,13 +22,6 @@ def get_connection():
 
 @contextmanager
 def get_cursor(connection):
-    """
-    Args:
-        arg1 (str): connection to database
-    Return:
-        connection: this simplify so much to make connections, only we can call function
-        and wait cursor to execute after of any transaction
-    """
     with connection:
         with connection.cursor() as cursor:
             yield cursor
@@ -36,15 +29,10 @@ def get_cursor(connection):
 
 # USER
 def create_tables(connection):
-    """
-    Args:
-        arg1 (str): connection to database
-    Return:
-        Query: create polls
-    """
     with get_cursor(connection) as cursor:
         cursor.execute(CREATE_TABLE_USER)
         cursor.execute(CREATE_TABLE_GUEST)
+        cursor.execute(CREATE_TABLE_PARKING)
 
 
 def register_new_user(
@@ -156,6 +144,13 @@ def get_user(connection, id):
         cursor.execute(SELECT_USER, (id,))
         user = cursor.fetchone()
         return user
+
+
+def insert_into_parking(connection):
+    with get_cursor(connection) as cursor:
+        cursor.execute(INSERT_INTO_PARKING)
+        parking_box = cursor.fetchone()[0]
+        return parking_box
 
 
 create_tables(parking.getconn())

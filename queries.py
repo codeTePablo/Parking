@@ -31,3 +31,8 @@ SELECT_USER = "SELECT * FROM new_user WHERE id = %s;"
 UPDATE_USER = "UPDATE new_user SET name = %s, surname = %s, num_cuenta = %s, num_placa = %s WHERE id = %s RETURNING *;"
 
 DELETE_USER = "DELETE FROM new_user WHERE id = %s;"
+
+# Parking Box
+CREATE_TABLE_PARKING = "CREATE TABLE IF NOT EXISTS parking (box SERIAL PRIMARY KEY);"
+
+INSERT_INTO_PARKING = "INSERT INTO parking DEFAULT VALUES RETURNING box;"

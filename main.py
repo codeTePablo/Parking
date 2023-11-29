@@ -16,14 +16,14 @@ import datetime
 from model.person import Person
 from model.guest import Guest
 from model.admin import Admin
-from model.password import Password
+from model.parking_box import Box
 
 # database
 from db import get_connection
 import db
 
 # import finger
-from finger import enroll_fingerprint, read_fingerprint
+# from finger import enroll_fingerprint, read_fingerprint
 
 
 class Windows:
@@ -669,10 +669,15 @@ class Windows:
         # funcional
         # finger_id = finger.read_fingerprint()
         # nuevo
-        finger_id = read_fingerprint()
+        # finger_id = read_fingerprint()
+        finger_id = 1
         # print(finger_id)
         if finger_id == 0:
             print("No se encontro huella")
+
+        box = Box()
+        box_id = box.get_box()
+        # print(box_id)
         # finger_id = 1
         user = Person(
             name=None,
@@ -749,6 +754,13 @@ class Windows:
         )
         label_time.pack(side=tk.TOP, padx=10, pady=10)
 
+        label_box = tk.Label(
+            data_parking,
+            text=f"Cajon: {box_id}",
+            font=("Agency FB", 15),
+        )
+        label_box.pack(side=tk.TOP, padx=10, pady=10)
+
         label_separator = tk.Label(
             data_parking,
             text="_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _",
@@ -791,10 +803,14 @@ class Windows:
     def open_window_guest_id(self):
         self.top.destroy()
         guest_id = self.entry_finger.get()
-        finger_id = enroll_fingerprint(guest_id)
+        # finger_id = enroll_fingerprint(guest_id)
+        finger_id = 66
         print(guest_id)
-        print("aqui")
+        # print("aqui")
         # 66, 120, 61, 67, 68
+
+        box = Box()
+        box_id = box.get_box()
 
         window_guest = tk.Toplevel(self.root)
         window_guest.title("Ventana Secundaria")
@@ -861,6 +877,13 @@ class Windows:
         )
         label_time.pack(side=tk.TOP, padx=10, pady=10)
 
+        label_box = tk.Label(
+            data_parking,
+            text=f"Folio: {guest.folio}",
+            font=("Agency FB", 15),
+        )
+        label_box.pack(side=tk.TOP, padx=10, pady=10)
+
         label_separator = tk.Label(
             data_parking,
             text="_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _",
@@ -881,7 +904,7 @@ class Windows:
 
         label_numer_client = tk.Label(
             key_parking,
-            text=f"Folio: \n {guest.folio}",
+            text=f"Cajon: \n {box_id}",
             font=("Agency FB", 28),
         )
         label_numer_client.pack(side=tk.TOP, padx=10, pady=10)
@@ -999,8 +1022,8 @@ class Windows:
 
     def reg_exit_user(self):
         # finger_id = finger.read_fingerprint()
-        finger_id = read_fingerprint()
-        # finger_id = 1
+        # finger_id = read_fingerprint()
+        finger_id = 1
         user = Person(
             name=None,
             surname=None,
@@ -1012,7 +1035,7 @@ class Windows:
         )
         if finger_id < 60:
             user_id = user.search_by_finger()
-            print(f"Aquiiii: {user_id}")
+            # print(f"Aquiiii: {user_id}")
 
             window_exit = tk.Toplevel(self.root)
             window_exit.title("window_exit")
